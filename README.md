@@ -39,7 +39,7 @@ git clone https://github.com/PKUJZX/agentguard && cd agentguard
 - 🚀 **Attack Launcher**：6 个一键按钮现场模拟攻击 —— *Retry Storm / Cross-Repo Hijack / AWS Key Exfil / SQL DROP / Payload Splitting / $50k Bank Transfer*，点完即可看到它们如何被中和。
 - 📊 **Stats Cards**：按判决类型实时聚合计数，展示"拦了多少、脱敏了多少、挂起了多少"。
 
-![AgentGuard dashboard](images/demo.png)
+![AgentGuard dashboard](images/demo.gif)
 
 ---
 

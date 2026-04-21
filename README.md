@@ -39,20 +39,6 @@ git clone <repo-url> && cd agentguard
 - 🚀 **Attack Launcher**：6 个一键按钮现场模拟攻击 —— *Retry Storm / Cross-Repo Hijack / AWS Key Exfil / SQL DROP / Payload Splitting / $50k Bank Transfer*，点完即可看到它们如何被中和。
 - 📊 **Stats Cards**：按判决类型实时聚合计数，展示"拦了多少、脱敏了多少、挂起了多少"。
 
-```
-┌─────────────────────────── AgentGuard Dashboard :9002 ──────────────────────────┐
-│  total 37   ✅ 18   ⛔ 6   🔁 5   🩹 4   ⏸ 2   ✅ 2                             │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│  🚀 Attack Launcher            │  📡 Live event feed                            │
-│  ⚡ Retry Storm       ──▶      │  10:22:01 🔁 REPLAYED   create_ticket  cache   │
-│  🔒 Cross-Repo Hijack ──▶      │  10:22:03 ⛔ DENIED     read_issue    repo-lock│
-│  🩹 AWS Key Exfil     ──▶      │  10:22:05 🩹 SANITIZED  send_message   dlp×3   │
-│  💥 SQL DROP          ──▶      │  10:22:07 ⏸ PENDING    bank_transfer  hitl    │
-│  🧩 Payload Splitting ──▶      │  10:22:09 ✅ EXECUTED   bank_transfer  approved│
-│  🧑‍⚖️ Bank Transfer    ──▶      │  …                                             │
-└─────────────────────────────────────────────────────────────────────────────────┘
-```
-
 ![AgentGuard dashboard](docs/demo.png)
 
 ---

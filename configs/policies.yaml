@@ -1,0 +1,43 @@
+# AgentGuard policy configuration.
+#
+# The file is evaluated against a CEL context with the following variables:
+#   - jwt:     dict of JWT claims extracted from the Authorization header
+#              (empty dict if no token was presented)
+#   - session: dict of session attributes (session_id, initial_repository, ...)
+#   - mcp:     dict with metadata about the MCP tool being invoked
+#              (mcp.tool.name, mcp.tool.operation, ...)
+#   - request: dict with request metadata (method, path, headers, body)
+#
+# Evaluation order:
+#   1. allow_rules  — ALL matching rules' `allow` expressions must be true.
+#                     Non-matching rules (whose `when` is false) are skipped.
+#   2. deny_rules   — ANY matching rule denies the request.
+#   3. high_risk_tools — if hit, request is suspended for HITL approval
+#                        instead of being proxied to the backend.
+
+allow_rules:
+  - name: ci-bot-tools-only
+    description: "Agents identified as ci-bot can only invoke non-destructive tools."
+    when: 'has(jwt.sub) && jwt.sub == "ci-bot"'
+    allow: 'mcp.tool.name in ["create_ticket", "search_docs", "read_issue", "send_message"]'
+
+  - name: repo-lock
+    description: "One conversation session may only interact with its initial GitHub repository."
+    when: 'has(session.initial_repository) && has(request.body.repository)'
+    allow: 'request.body.repository == session.initial_repository'
+
+deny_rules:
+  - name: block-sql-drop
+    description: "Reject any payload that smells like a destructive SQL statement."
+    deny: 'string(request.body).matches("(?i)drop\\s+table")'
+
+  - name: block-shell-rm
+    description: "Reject any payload that smells like a destructive shell command."
+    deny: 'string(request.body).matches("rm\\s+-rf\\s+/")'
+
+# Tools listed here bypass the backend and trigger the asynchronous HITL flow.
+high_risk_tools:
+  - execute_bank_transfer
+  - drop_database
+  - delete_production_table
+  - send_contract_email

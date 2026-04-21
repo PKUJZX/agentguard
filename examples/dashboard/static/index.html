@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>AgentGuard — Live Defense Dashboard</title>
+  <link rel="stylesheet" href="/static/styles.css"/>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">🛡️</span>
+      <div>
+        <h1>AgentGuard</h1>
+        <p class="sub">Zero-trust security gateway for autonomous AI agents</p>
+      </div>
+    </div>
+    <div class="stats" id="stats">
+      <div class="stat" data-verdict="total"><span class="num" id="stat-total">0</span><span class="lbl">total</span></div>
+      <div class="stat ok"      data-verdict="ALLOWED"       ><span class="num" id="stat-ALLOWED">0</span><span class="lbl">allowed</span></div>
+      <div class="stat deny"    data-verdict="DENIED"        ><span class="num" id="stat-DENIED">0</span><span class="lbl">denied</span></div>
+      <div class="stat replay"  data-verdict="REPLAYED"      ><span class="num" id="stat-REPLAYED">0</span><span class="lbl">replayed</span></div>
+      <div class="stat clean"   data-verdict="SANITIZED"     ><span class="num" id="stat-SANITIZED">0</span><span class="lbl">sanitized</span></div>
+      <div class="stat hitl"    data-verdict="SUSPENDED_HITL"><span class="num" id="stat-SUSPENDED_HITL">0</span><span class="lbl">pending HITL</span></div>
+      <div class="stat exec"    data-verdict="EXECUTED_HITL" ><span class="num" id="stat-EXECUTED_HITL">0</span><span class="lbl">approved</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel launchers">
+      <h2>🚀 Attack Launcher</h2>
+      <p class="hint">Click a button to simulate a prompt-injection-driven attack and watch AgentGuard neutralize it in real time.</p>
+      <div class="buttons">
+        <button data-scenario="retry_storm"         class="btn btn-replay">⚡ Retry Storm<small>5× identical POST — only 1 reaches backend</small></button>
+        <button data-scenario="cross_repo"          class="btn btn-deny"  >🔒 Cross-Repo Hijack<small>CEL repo-lock blocks victim/private</small></button>
+        <button data-scenario="dlp"                 class="btn btn-clean" >🩹 AWS Key Exfil<small>AKIA secret is masked before upstream</small></button>
+        <button data-scenario="sql_drop"            class="btn btn-deny"  >💥 SQL DROP Injection<small>CEL deny rule fires on DROP TABLE</small></button>
+        <button data-scenario="payload_splitting"   class="btn btn-clean" >🧩 Payload Splitting<small>Multi-field secrets all rewritten</small></button>
+        <button data-scenario="hitl"                class="btn btn-hitl"  >🧑‍⚖️ Bank Transfer (HITL)<small>202 → async approve → executed</small></button>
+      </div>
+      <div id="scenario-result" class="result hidden"></div>
+    </section>
+
+    <section class="panel timeline">
+      <div class="timeline-header">
+        <h2>📡 Live event feed</h2>
+        <div>
+          <label><input type="checkbox" id="auto-scroll" checked/> auto-scroll</label>
+          <button id="clear-feed" class="btn-sm">clear</button>
+        </div>
+      </div>
+      <div id="feed" class="feed">
+        <div class="empty">Waiting for gateway traffic…<br>Click an attack button above to generate events.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Gateway: <code id="gw">—</code></span>
+    <span>Connection: <span id="conn" class="off">offline</span></span>
+    <span class="grow"></span>
+    <a href="https://github.com/agentguard/agentguard" target="_blank" rel="noreferrer">GitHub</a>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

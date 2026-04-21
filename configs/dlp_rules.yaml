@@ -1,0 +1,40 @@
+# Data Loss Prevention (DLP) rules.
+#
+# Each rule is a labelled regular expression (Python `re` syntax). When a
+# request body string matches, the matched substring is rewritten with the
+# configured mask BEFORE the payload is forwarded to the upstream backend.
+#
+# This implements the "programmatic payload rewrite" idea from the research
+# plan: we do not simply block the request; we sanitize it so that real
+# credentials never reach an external hop controlled by an attacker.
+
+rules:
+  - name: aws-access-key
+    pattern: 'AKIA[0-9A-Z]{16}'
+    mask: 'AKIA****REDACTED'
+
+  - name: aws-secret-key
+    pattern: '(?<![A-Za-z0-9/+=])[A-Za-z0-9/+=]{40}(?![A-Za-z0-9/+=])'
+    mask: '****AWS_SECRET_REDACTED****'
+    # This pattern is intentionally conservative; in production combine it with
+    # adjacent "secret" / "AWS_SECRET_ACCESS_KEY" context-aware detectors.
+
+  - name: github-pat
+    pattern: 'ghp_[A-Za-z0-9]{20,}'
+    mask: 'ghp_****REDACTED'
+
+  - name: github-fine-grained-pat
+    pattern: 'github_pat_[A-Za-z0-9_]{20,}'
+    mask: 'github_pat_****REDACTED'
+
+  - name: openai-key
+    pattern: 'sk-[A-Za-z0-9]{20,}'
+    mask: 'sk-****REDACTED'
+
+  - name: generic-jwt
+    pattern: 'eyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}'
+    mask: 'eyJ****JWT_REDACTED'
+
+  - name: private-key-block
+    pattern: '-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----[\s\S]+?-----END (?:RSA |EC |OPENSSH )?PRIVATE KEY-----'
+    mask: '-----REDACTED PRIVATE KEY-----'

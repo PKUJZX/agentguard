@@ -53,9 +53,7 @@ git clone <repo-url> && cd agentguard
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-> 💡 把你录制的 10 秒演示 GIF 放到 `docs/demo.gif`，下方即可自动显示：
->
-> <!-- ![AgentGuard live dashboard](docs/demo.png) -->
+![AgentGuard dashboard](docs/demo.png)
 
 ---
 

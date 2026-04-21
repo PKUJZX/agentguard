@@ -29,7 +29,7 @@
 ## ✨ 30 秒亲眼看见它工作
 
 ```bash
-git clone <repo-url> && cd agentguard
+git clone https://github.com/PKUJZX/agentguard && cd agentguard
 ./scripts/demo.sh          # 一键拉起整套栈 + 自动跑 6 个攻防场景
 ```
 
